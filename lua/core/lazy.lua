@@ -9,68 +9,108 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Use a protected call so we don't error out on first use
 local status_ok, lazy = pcall(require, 'lazy')
 if not status_ok then
   return
 end
 
--- Start setup
 lazy.setup({
   spec = {
-    -- Colorscheme:
-    -- The colorscheme should be available when starting Neovim.
+    -- Colorscheme: Catppuccin
     {
-      'navarasu/onedark.nvim',
-      lazy = false, -- make sure we load this during startup if it is your main colorscheme
-      priority = 1000, -- make sure to load this before all the other start plugins
+      'catppuccin/nvim',
+      name = 'catppuccin',
+      lazy = false,
+      priority = 1000,
     },
 
-    -- other colorschemes:
-    { 'tanvirtin/monokai.nvim', lazy = true },
-    { 'https://github.com/rose-pine/neovim', name = 'rose-pine', lazy = true },
-
     -- Icons
-    { 'kyazdani42/nvim-web-devicons', lazy = true },
+    { 'nvim-tree/nvim-web-devicons', lazy = true },
 
     -- Dashboard (start screen)
     {
       'goolord/alpha-nvim',
-      dependencies = { 'kyazdani42/nvim-web-devicons' },
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
     },
 
-    -- Git labels
+    -- Git signs in gutter
     {
       'lewis6991/gitsigns.nvim',
-      lazy = true,
-      dependencies = {
-        'nvim-lua/plenary.nvim',
-        'kyazdani42/nvim-web-devicons',
-      },
+      event = { 'BufReadPre', 'BufNewFile' },
       config = function()
-        require('gitsigns').setup{}
+        require('gitsigns').setup {
+          current_line_blame = true,
+          current_line_blame_opts = { delay = 500 },
+        }
       end
     },
 
     -- File explorer
     {
-      'kyazdani42/nvim-tree.lua',
-      dependencies = { 'kyazdani42/nvim-web-devicons' },
+      'nvim-tree/nvim-tree.lua',
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
     },
 
-    -- Statusline
+    -- Statusline (lualine replaces feline)
     {
-      'freddiehaddad/feline.nvim',
+      'nvim-lualine/lualine.nvim',
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
+    },
+
+    -- Bufferline (tab-like buffer bar)
+    {
+      'akinsho/bufferline.nvim',
+      version = "*",
+      dependencies = { 'nvim-tree/nvim-web-devicons' },
+    },
+
+    -- Telescope (fuzzy finder)
+    {
+      'nvim-telescope/telescope.nvim',
+      tag = '0.1.8',
+      dependencies = { 'nvim-lua/plenary.nvim' },
+    },
+
+    -- Which-key (keybinding hints)
+    {
+      'folke/which-key.nvim',
+      event = 'VeryLazy',
+    },
+
+    -- Todo comments highlighting
+    {
+      'folke/todo-comments.nvim',
+      event = { 'BufReadPre', 'BufNewFile' },
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      config = function()
+        require('todo-comments').setup{}
+      end
+    },
+
+    -- Noice (better UI for messages, cmdline, popups)
+    {
+      'folke/noice.nvim',
+      event = 'VeryLazy',
       dependencies = {
-        'kyazdani42/nvim-web-devicons',
-        'lewis6991/gitsigns.nvim',
+        'MunifTanjim/nui.nvim',
+        'rcarriga/nvim-notify',
       },
+    },
+
+    -- Surround (ys, cs, ds motions)
+    {
+      'kylechui/nvim-surround',
+      version = "*",
+      event = 'VeryLazy',
+      config = function()
+        require('nvim-surround').setup{}
+      end
     },
 
     -- Treesitter
@@ -78,9 +118,6 @@ lazy.setup({
 
     -- Indent line
     { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts = {} },
-
-    -- Tag viewer
-    { 'preservim/tagbar' },
 
     -- Autopair
     {
@@ -94,27 +131,23 @@ lazy.setup({
     -- WakaTime
     {
      "wakatime/vim-wakatime",
-     lazy=false,
-     setup = function ()
-         vim.cmd([[packadd wakatime/vim-wakatime]])
-     end
+     lazy = false,
     },
+
     -- LSP
     { 'neovim/nvim-lspconfig' },
 
     -- Autocomplete
     {
       'hrsh7th/nvim-cmp',
-      -- load cmp on InsertEnter
       event = 'InsertEnter',
-      -- these dependencies will only be loaded when cmp loads
-      -- dependencies are always lazy-loaded unless specified otherwise
       dependencies = {
         'L3MON4D3/LuaSnip',
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-path',
         'hrsh7th/cmp-buffer',
         'saadparwaiz1/cmp_luasnip',
+        'onsails/lspkind.nvim',
       },
     },
   },

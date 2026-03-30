@@ -1,16 +1,16 @@
--- Neovim init file
--- Maintainer: https://github.com/brainfucksec/neovim-lua
-
 require('core/lazy')
-require('core/autocmds')
-require('core/keymaps')
+require('core/options')
 require('core/colors')
 require('core/statusline')
-require('core/options')
+require('core/autocmds')
+require('core/keymaps')
 require('lsp/lspconfig')
 require('plugins/nvim-tree')
 require('plugins/indent-blankline')
 require('plugins/nvim-cmp')
 require('plugins/nvim-treesitter')
 require('plugins/alpha-nvim')
-
+require('plugins/telescope')
+require('plugins/bufferline')
+require('plugins/noice')
+require('plugins/which-key')

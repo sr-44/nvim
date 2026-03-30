@@ -1,58 +1,58 @@
-
--- Default options are not included
--- See: https://neovim.io/doc/user/vim_diff.html
--- [2] Defaults - *nvim-defaults*
-
-local g = vim.g       -- Global variables
-local opt = vim.opt   -- Set options (global/buffer/windows-scoped)
+local g = vim.g
+local opt = vim.opt
 
 -----------------------------------------------------------
 -- General
 -----------------------------------------------------------
-opt.mouse = 'a'                       -- Enable mouse support
-opt.clipboard = 'unnamedplus'         -- Copy/paste to system clipboard
-opt.swapfile = false                  -- Don't use swapfile
-opt.completeopt = 'menuone,noinsert,noselect'  -- Autocomplete options
+opt.mouse = 'a'
+opt.clipboard = 'unnamedplus'
+opt.swapfile = false
+opt.completeopt = 'menuone,noinsert,noselect'
+opt.undofile = true
 
 -----------------------------------------------------------
 -- Neovim UI
 -----------------------------------------------------------
-opt.number = true           -- Show line number
-opt.showmatch = true        -- Highlight matching parenthesis
-opt.foldmethod = 'marker'   -- Enable folding (default 'foldmarker')
-opt.colorcolumn = '90'      -- Line lenght marker at 80 columns
-opt.splitright = true       -- Vertical split to the right
-opt.splitbelow = true       -- Horizontal split to the bottom
-opt.ignorecase = true       -- Ignore case letters when search
-opt.smartcase = true        -- Ignore lowercase for the whole pattern
-opt.linebreak = true        -- Wrap on word boundary
-opt.termguicolors = true    -- Enable 24-bit RGB colors
-opt.laststatus=3            -- Set global statusline
+opt.number = true
+opt.relativenumber = true
+opt.cursorline = true
+opt.showmatch = true
+opt.foldmethod = 'marker'
+opt.colorcolumn = '100'
+opt.splitright = true
+opt.splitbelow = true
+opt.ignorecase = true
+opt.smartcase = true
+opt.linebreak = true
+opt.termguicolors = true
+opt.laststatus = 3
+opt.signcolumn = 'yes'
+opt.scrolloff = 8
+opt.sidescrolloff = 8
+opt.pumheight = 10
+opt.showmode = false
 
 -----------------------------------------------------------
 -- Tabs, indent
 -----------------------------------------------------------
-opt.expandtab = true        -- Use spaces instead of tabs
-opt.shiftwidth = 4          -- Shift 4 spaces when tab
-opt.tabstop = 4             -- 1 tab == 4 spaces
-opt.smartindent = true      -- Autoindent new lines
+opt.expandtab = true
+opt.shiftwidth = 4
+opt.tabstop = 4
+opt.smartindent = true
 
 -----------------------------------------------------------
 -- Memory, CPU
 -----------------------------------------------------------
-opt.hidden = true           -- Enable background buffers
-opt.history = 100           -- Remember N lines in history
-opt.lazyredraw = true       -- Faster scrolling
-opt.synmaxcol = 240         -- Max column for syntax highlight
-opt.updatetime = 250        -- ms to wait for trigger an event
+opt.hidden = true
+opt.history = 100
+opt.synmaxcol = 240
+opt.updatetime = 250
 
 -----------------------------------------------------------
 -- Startup
 -----------------------------------------------------------
--- Disable nvim intro
 opt.shortmess:append "sI"
 
--- -- Disable builtin plugins
 local disabled_built_ins = {
    "2html_plugin",
    "getscript",

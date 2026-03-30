@@ -1,11 +1,3 @@
------------------------------------------------------------
--- Autocomplete configuration file
------------------------------------------------------------
-
--- Plugin: nvim-cmp
--- url: https://github.com/hrsh7th/nvim-cmp
-
-
 local cmp_status_ok, cmp = pcall(require, 'cmp')
 if not cmp_status_ok then
   return
@@ -16,21 +8,38 @@ if not luasnip_status_ok then
   return
 end
 
+local lspkind_ok, lspkind = pcall(require, 'lspkind')
+
 cmp.setup {
-  -- Load snippet support
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
   },
 
--- Completion settings
   completion = {
-    --completeopt = 'menu,menuone,noselect'
-    keyword_length = 2
+    keyword_length = 2,
   },
 
-  -- Key mapping
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
+
+  formatting = lspkind_ok and {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text',
+      maxwidth = 50,
+      ellipsis_char = '...',
+      menu = {
+        nvim_lsp = '[LSP]',
+        luasnip = '[Snip]',
+        buffer = '[Buf]',
+        path = '[Path]',
+      },
+    }),
+  } or {},
+
   mapping = {
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -42,8 +51,6 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-
-    -- Tab mapping
     ['<Tab>'] = function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -61,10 +68,9 @@ cmp.setup {
       else
         fallback()
       end
-    end
+    end,
   },
 
-  -- Load sources, see: https://github.com/topics/nvim-cmp
   sources = {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
@@ -72,4 +78,3 @@ cmp.setup {
     { name = 'buffer' },
   },
 }
-
